@@ -5,9 +5,6 @@ namespace App\Http\Controllers;
 use App\Enums\ProjectStatus;
 use App\Models\Employee;
 use App\Models\ProjectTask;
-use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\DB;
 
 class TeamMembersController extends Controller {
     public function index() {
@@ -31,7 +28,11 @@ class TeamMembersController extends Controller {
 
     public function viewTeamMember($called_from, $member_id, $pro_id = null) {
         $member_id = my_decrypt($member_id);
-        $member_info = Employee::query()->with('admin_user_details')->select('emp_id', 'emp_internal_id', 'emp_full_name', 'emp_email', 'emp_designation', 'emp_photo', 'emp_department', 'emp_sub_department')->where('emp_id', '=', $member_id)/*->groupBy('emp_id')*/ ->first()->toArray();
+        $member_info = Employee::query()->with('admin_user_details')->select('emp_id', 'emp_internal_id', 'emp_full_name', 'emp_email', 'emp_designation', 'emp_photo', 'emp_department', 'emp_sub_department')->where('emp_id', '=', $member_id)/* ->groupBy('emp_id') */ ->first()?->toArray();
+
+        if (empty($member_info)) {
+            return redirect()->back()->with('error', 'Team Member Not Found' . ($called_from == 'project_team' ? ' In Project' : ''));
+        }
 
         $emp_tasks = ProjectTask::query()->select('prt_id', 'prt_title', 'pro_name', 'prt_priority', 'prt_status', 'prt_due_date')->join('project_task_assignments', 'prt_id', '=', 'pta_prt_id')->join('projects', 'prt_pro_id', '=', 'pro_id')->where('pta_assign_to', '=', $member_id)->paginate(config('constants.PER_PAGE_ITEM_COUNT'), pageName: 'tasks')->withQueryString();
 
@@ -39,6 +40,7 @@ class TeamMembersController extends Controller {
             'total_task' => count($emp_tasks),
             'completed_task' => $emp_tasks->where('prt_status', '=', ProjectStatus::COMPLETED->value)->count(),
         ];
+
         return view('team-members.view-team-member', compact('member_info', 'called_from', 'pro_id', 'emp_tasks', 'emp_task_statistics'));
     }
 }

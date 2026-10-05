@@ -131,7 +131,12 @@ class AdminUserController extends Controller {
     public function editAdmin($adm_id) {
         $mode = 'edit';
         $called_from = 'admin';
-        $admin_data = AdminUser::query()->where('adm_id', my_decrypt($adm_id))->first();
+        $adm_id = my_decrypt($adm_id);
+        $admin_data = AdminUser::query()->where('adm_id', $adm_id)->first();
+
+        if (empty($admin_data)) {
+            return redirect()->back()->with('error', 'Admin User not found.');
+        }
         return view('admin-user.add-edit-admin-user', compact('mode', 'admin_data', 'called_from'));
     }
 
@@ -151,8 +156,9 @@ class AdminUserController extends Controller {
         if ($admin_exist) {
             $admin_exist->adm_name = $request->admin_name;
             $admin_exist->adm_user_name = $request->user_name;
-            if ($adm_id != get_logged_in_user_id())
+            if ($adm_id != get_logged_in_user_id()) {
                 $admin_exist->adm_status = $request->status;
+            }
 
             if (!empty($request->password)) {
                 $admin_exist->adm_password = $request->password;

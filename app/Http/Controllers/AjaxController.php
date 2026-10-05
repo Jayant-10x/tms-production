@@ -13,9 +13,15 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class AjaxController extends Controller {
-
     public function getSubDepartments(Request $request, $department) {
-        $department = DepartmentsEnum::from($department);
+        $department = DepartmentsEnum::tryFrom($department);
+
+        if (!$department) {
+            return response()->json([
+                'data' => [],
+                'message' => 'Invalid department specified.',
+            ], 404);
+        }
 
         $data = collect(
             DepartmentsEnum::get_sub_departments_by_department($department)
@@ -38,7 +44,7 @@ class AjaxController extends Controller {
         $reporting = [];
 
         if (!empty($department) || !empty($sub_department)) {
-            $reportingQuery = Employee::query()->where(function (Builder $query) use ($department, $sub_department) {
+            $reportingQuery = Employee::query()->where(function (Builder $query) {
                 $query->where('emp_designation', 'manager');
                 $query->orWhere('emp_designation', 'tl');
             });

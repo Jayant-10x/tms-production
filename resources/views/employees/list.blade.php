@@ -16,7 +16,7 @@
                                value="{{ request('emp_name') }}">
                     </div>
                     <div class="col-md-2">
-                        <label for="emp_desigation" class="form-label">Designation</label>
+                        <label for="emp_designation" class="form-label">Designation</label>
                         <select class="form-control"
                                 id="emp_designation" data-choices data-choices-sorting-false
                                 data-placeholder="Select Designation" name="emp_designation">
