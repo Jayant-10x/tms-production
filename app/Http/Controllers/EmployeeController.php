@@ -27,12 +27,12 @@ class EmployeeController extends Controller {
 
         if ($request->filled('emp_dept')) {
             $employeeBaseQuery->where('emp_department', '=', $request->emp_dept);
-            $filter_arr = ['emp_department' => $request->emp_department];
+            $filter_arr = ['emp_dept' => $request->emp_dept];
         }
 
         if ($request->filled('emp_sub_dept')) {
             $employeeBaseQuery->where('emp_sub_department', '=', $request->emp_sub_dept);
-            $filter_arr = ['emp_sub_department' => $request->emp_sub_dept];
+            $filter_arr = ['emp_sub_dept' => $request->emp_sub_dept];
         }
 
         if ($request->filled('emp_status')) {
@@ -46,6 +46,7 @@ class EmployeeController extends Controller {
 
     public function add(Request $request) {
         $mode = 'add';
+
         //        session()->flash('success', 'Employee added successfully.');
         return view('employees.add_edit_employee', compact('mode'));
     }
@@ -109,6 +110,7 @@ class EmployeeController extends Controller {
 
         if (!empty($emp_data)) {
             $called_from = 'employee';
+
             return view('employees.view_employee', compact('emp_data', 'called_from'));
         } else {
             return redirect()->back()->with('error', 'Employee not found.');
@@ -212,6 +214,7 @@ class EmployeeController extends Controller {
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
             ]);
+
             return redirect(route('employees.edit', array_merge(['emp_id' => my_encrypt($emp_id)], $request->query())))->with('error', 'Something went wrong.');
         }
     }

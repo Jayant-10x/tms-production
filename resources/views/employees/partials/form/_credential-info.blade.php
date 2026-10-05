@@ -11,7 +11,7 @@
                 <label for="user_name" class="form-label">User Name <span class="text-danger">*</span></label>
                 <input type="text" id="user_name" name="user_name"
                        class="form-control @error('user_name') is-invalid @enderror"
-                       autocomplete="off"
+                       autocomplete="new-username"
                        value="{{$admin_data->adm_user_name ?? old('user_name')}}">
                 @error('user_name')
                 <span class="validation-message">{{ $message }}</span>
@@ -49,7 +49,7 @@
                     @endempty</label>
                 <input type="password" id="password" name="password"
                        class="form-control @error('password') is-invalid @enderror"
-                       autocomplete="off">
+                       autocomplete="new-password">
                 @error('password')
                 <span class="validation-message">{{ $message }}</span>
                 @enderror
