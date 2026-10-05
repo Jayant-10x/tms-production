@@ -30,20 +30,32 @@
                                 </td>
                                 <td>{{$task->project->pro_name}}</td>
                                 <td class="text-center">
-                                    {{--@php
-                                        $assignees_html = '<span>';
-                                        foreach ($task->assignees as $assignee){
-                                            $assignees_html.= '<p>'.$assignee.'</p>';
-                                        }
-                                        $assignees_html .= '</span>';
-                                    @endphp--}}
-                                    <span data-bs-toggle="tooltip" data-bs-placement="top"
+                                    @php
+                                        $task_assignees = explode(',', $task->assignees);
+                                    @endphp
+                                    <div class="text-primary fw-bold fs-5">
+                                        @for($start = 0; $start < count($task_assignees); $start++)
+                                            @if($start > 2)
+                                                @continue
+                                            @endif
+                                            @php
+                                                $initial_char_additional_style = '';
+                                                if ($start != 0) {
+                                                    $initial_char_additional_style = 'style="margin-left: -10px;"';
+                                                }
+                                            @endphp
+                                            <span class="assignee-char" {!! $initial_char_additional_style !!}>
+                                                {{ get_initials_char($task_assignees[$start]) }}
+                                            </span>
+                                        @endfor
+                                    </div>
+                                    {{--<span data-bs-toggle="tooltip" data-bs-placement="top"
                                           data-bs-title="{{$task->assignees}}"
                                           data-bs-container="body"
                                           class="d-inline-flex align-middle">
                                         <iconify-icon icon="solar:info-circle-bold"
                                                       class="fs-14 text-warning"></iconify-icon>
-                                    </span>
+                                    </span>--}}
                                 </td>
                                 <td><span
                                         class="badge badge-soft-{{$task->prt_priority?->color()}} badge-outline-{{$task->prt_priority?->color()}} rounded-pill me-1 fs-6"><iconify-icon

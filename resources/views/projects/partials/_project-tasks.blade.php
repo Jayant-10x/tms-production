@@ -5,7 +5,7 @@
             <tr>
                 <th>Sr. no.</th>
                 <th width="15%">Task</th>
-                <th width="10%">Assignees</th>
+                <th width="10%" class="text-center">Assignees</th>
                 <th width="12%">Priority</th>
                 <th>Status</th>
                 <th>Action</th>
@@ -19,19 +19,25 @@
                         {{generate_shorten_string($task->prt_title)}}
                     </td>
                     <td class="text-center">
-                        {{--@php
-                                $assignees_html = '<span>';
-                                foreach ($task->assignees as $assignee){
-                                    $assignees_html.= '<p>'.$assignee.'</p>';
-                                }
-                                $assignees_html .= '</span>';
-                            @endphp--}}
-                        <span data-bs-toggle="tooltip" data-bs-placement="top"
-                              data-bs-title="{{$task->assignees}}"
-                              data-bs-container="body"
-                              class="d-inline-flex align-middle">
-                        <iconify-icon icon="solar:info-circle-bold" class="fs-14 text-warning"></iconify-icon>
-                    </span>
+                        @php
+                            $task_assignees = explode(',', $task->assignees);
+                        @endphp
+                        <div class="text-primary fw-bold fs-5">
+                            @for($start = 0; $start < count($task_assignees); $start++)
+                                @if($start > 2)
+                                    @continue
+                                @endif
+                                @php
+                                    $initial_char_additional_style = '';
+                                    if ($start != 0) {
+                                        $initial_char_additional_style = 'style="margin-left: -10px;"';
+                                    }
+                                @endphp
+                                <span class="assignee-char" {!! $initial_char_additional_style !!}>
+                                                {{ get_initials_char($task_assignees[$start]) }}
+                                            </span>
+                            @endfor
+                        </div>
                     </td>
                     <td>
                     <span
@@ -62,5 +68,7 @@
     </div>
     {!! generate_pagination($project_tasks,"Tasks") !!}
 @else
-    {!! generate_no_record_html() !!}
+    <div class="row">
+        {!! generate_no_record_html() !!}
+    </div>
 @endif

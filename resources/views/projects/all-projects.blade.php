@@ -74,7 +74,16 @@
                                         <div class="col-md-7">
                                             <div class="text-primary fw-bold fs-5">
                                                 @for($start = 0; $start < count($project_task_assignees); $start++)
-                                                    <span class="assignee-char">
+                                                    @if($start > 5)
+                                                        @continue
+                                                    @endif
+                                                    @php
+                                                        $initial_char_additional_style = '';
+                                                        if ($start != 0) {
+                                                            $initial_char_additional_style = 'style="margin-left: -10px;"';
+                                                        }
+                                                    @endphp
+                                                    <span class="assignee-char" {!! $initial_char_additional_style !!}>
                                                         {{ get_initials_char($project_task_assignees[$start]) }}
                                                     </span>
                                                 @endfor

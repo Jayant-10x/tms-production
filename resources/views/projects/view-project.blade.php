@@ -145,13 +145,13 @@
                             <li class="nav-item">
                                 <a href="#project_tasks" data-bs-toggle="tab" aria-expanded="false"
                                    class="nav-link active">
-                                    <span class="d-block d-sm-none"><i class="bx bx-home"></i></span>
+                                    <span class="d-block d-sm-none"><i class="bi bi-list-check"></i></span>
                                     <span class="d-none d-sm-block">Tasks ({{count($project_tasks)}})</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="#project_team" data-bs-toggle="tab" aria-expanded="true" class="nav-link">
-                                    <span class="d-block d-sm-none"><i class="bx bx-user"></i></span>
+                                    <span class="d-block d-sm-none"><i class="bi bi-people"></i></span>
                                     <span class="d-none d-sm-block">Team</span>
                                 </a>
                             </li>
